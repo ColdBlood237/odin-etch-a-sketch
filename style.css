@@ -8,9 +8,9 @@
     display: grid;
     grid-template-rows: repeat(var(--grid-rows), 1fr);
     grid-template-columns: repeat(var(--grid-cols), 1fr);
-    width: 720px;
-    height: 720px;
-    margin: 200px auto 0;
+    width: 700px;
+    height: 700px;
+    margin: 10px auto 20px;
 }
 
 .grid-item {
@@ -19,6 +19,9 @@
 
 }
 
-button {
-    margin: 20px auto 0;
+.btn-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 8px;
 }
