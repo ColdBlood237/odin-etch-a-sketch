@@ -45,10 +45,18 @@ function resetGrid() {
 
 function draws() {
     const cells = document.querySelectorAll(".grid-item");
-    console.log(cells);
     cells.forEach(element => {
         element.addEventListener("mouseover", (e) => {
-            e.target.style.backgroundColor = "black";
+            let pixelColor = e.target.style.backgroundColor;
+            if (pixelColor === "") {
+                var R = Math.round(Math.random() * 255);
+                var G = Math.round(Math.random() * 255);
+                var B = Math.round(Math.random() * 255);
+                e.target.style.backgroundColor = `rgb(${R},${G},${B})`;
+            }
+            else if (pixelColor !== "" && pixelColor !== "rgb(0,0,0)") {
+                console.log(pixelColor);
+            }
         });
     });
 }
