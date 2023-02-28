@@ -37,7 +37,6 @@ function removeGrid() {
 
 function resetGrid() {
     const cells = document.querySelectorAll(".grid-item");
-    console.log(cells);
     cells.forEach(element => {
         element.style.backgroundColor = "white";
     });
@@ -48,18 +47,46 @@ function draws() {
     cells.forEach(element => {
         element.addEventListener("mouseover", (e) => {
             let pixelColor = e.target.style.backgroundColor;
+            // if pixel is empty we add a color
             if (pixelColor === "") {
-                var R = Math.round(Math.random() * 255);
-                var G = Math.round(Math.random() * 255);
-                var B = Math.round(Math.random() * 255);
-                e.target.style.backgroundColor = `rgb(${R},${G},${B})`;
+                e.target.style.backgroundColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
             }
-            else if (pixelColor !== "" && pixelColor !== "rgb(0,0,0)") {
-                console.log(pixelColor);
+            // if there's already a color we darken it by 10%
+            else if (pixelColor !== "" && pixelColor !== "#000000") {
+                let RGBArray = rgbStringToRgbArray(pixelColor);
+                let pixelColorHex = rgbToHex(RGBArray[0], RGBArray[1], RGBArray[2]);
+                e.target.style.backgroundColor = darken(pixelColorHex, 10);
             }
         });
     });
 }
 
+
+// transform an rgb string of this format "rgb(xxx, xxx, xxx)" to an array of numerical values [xxx, xxx, xxx]
+function rgbStringToRgbArray(rgbString) {
+    let rgbArray = rgbString.slice(4, rgbString.length - 1).split(",");
+    for (let i = 0; i < 3; i++) {
+        rgbArray[i] = Number(rgbArray[i]);
+    }
+    return rgbArray;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
+}
+
+
+function darken(color, amount) {
+    color = (color.indexOf("#") >= 0) ? color.substring(1, color.length) : color;
+    amount = parseInt((255 * amount) / 100);
+    return color = `#${subtractLight(color.substring(0, 2), amount)}${subtractLight(color.substring(2, 4), amount)}${subtractLight(color.substring(4, 6), amount)}`;
+}
+
+function subtractLight(color, amount) {
+    let cc = parseInt(color, 16) - amount;
+    let c = (cc < 0) ? 0 : (cc);
+    c = (c.toString(16).length > 1) ? c.toString(16) : `0${c.toString(16)}`;
+    return c;
+}
 
 
